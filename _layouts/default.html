@@ -4,14 +4,30 @@
 {% include head.html %}
 </head>
 <body>
-<main>
-  <h1>{{ page.question }}</h1>
-  {{ content }}
-  <nav>
-  {% for link in page.links %}
-    <a href="{{ link.to | relative_url }}"{% if link.class %} class="{{ link.class }}"{% endif %}>{{ link.label }}</a>
-  {% endfor %}
-  </nav>
-</main>
+{% include brick-wall.svg %}
+<div class="page">
+  <div class="frame">
+    <main class="board" id="board">
+      <svg class="smudge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M-10 30 L 110 4 M-10 92 L 110 62"/></svg>
+      <div class="stage" id="stage">
+        {{ content }}
+      </div>
+      <div class="doodles" id="doodles" aria-hidden="true"></div>
+    </main>
+  </div>
+  <footer class="site-footer">
+    <a class="footer-github" href="https://github.com/DeckOfPandas/shall-i-drink-wine" aria-label="Source on GitHub">{% include icons/github.svg %}</a>
+    <p class="copyright">&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
+    {% comment %} Two sentences in two spans, so a narrow screen breaks
+       between them and never inside one. {% endcomment %}
+    <p class="licence">
+      <span>Code: <a href="https://github.com/DeckOfPandas/shall-i-drink-wine/blob/main/LICENSE">MIT</a>.</span>
+      <span>Data and writing: <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</span>
+    </p>
+    <div class="hearts" aria-hidden="true">{% include icons/hearts.svg %}</div>
+  </footer>
+</div>
+<div class="visually-hidden" id="announce" aria-live="polite"></div>
+{% include art.html %}
 </body>
 </html>

@@ -26,6 +26,7 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
+      - run: ruby scripts/validate-pathway.rb
       - uses: actions/configure-pages@v5
         id: pages
       - run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"

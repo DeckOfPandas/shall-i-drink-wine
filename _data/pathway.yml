@@ -1,0 +1,133 @@
+# Every word on the site lives here. scripts/validate-pathway.rb checks the
+# shape; README.md explains how to add a question, a loading line or move
+# something on the reveal board.
+
+start: q1
+
+landing:
+  heading: "SHALL I DRINK WINE?"
+  button: "Let's go →"
+
+nodes:
+  q1:
+    type: question
+    text: "Do you like wine?"
+    board_label: "Like wine?"
+    options:
+      - { label: "Yes", next: q2_now }
+      - { label: "No", next: q2_sure }
+
+  q2_now:
+    type: question
+    text: "Do you want to have a glass of wine now?"
+    board_label: "Glass now?"
+    options:
+      - { label: "Yes", next: q3_early }
+      - { label: "No", next: q3_why }
+
+  q3_early:
+    type: question
+    text: "Is it 9am?"
+    board_label: "Breakfast wine?"
+    options:
+      - { label: "Yes", next: v_five_oclock }
+      - { label: "No", next: v_great }
+
+  q3_why:
+    type: question
+    text: "Why not?"
+    board_label: "Why not?"
+    options:
+      - { label: "I'm driving.", next: v_driving }
+      - { label: "I'm pregnant.", next: v_pregnant }
+      - { label: "I'm not in the mood.", next: v_mood }
+      - { label: "I don't like wine.", next: q2_sure }
+
+  q2_sure:
+    type: question
+    text: "Are you sure?"
+    board_label: "Sure?"
+    options:
+      - { label: "Yes", next: q3_wrong }
+      - { label: "No", next: v_great }
+
+  q3_wrong:
+    type: question
+    text: "Have you considered not being wrong?"
+    board_label: "Considered not being wrong?"
+    options:
+      - { label: "Yes", next: v_sorry }
+      - { label: "No", next: v_sorry }
+
+  v_great:
+    type: verdict
+    text: "Great! Have a glass of wine."
+    board_label: "Great!"
+
+  v_five_oclock:
+    type: verdict
+    text: "Well, if now is the time then now is the time. It's 5 o'clock somewhere, of course. But you know when it'll be 5 o'clock here? ..."
+    board_label: "5 o'clock somewhere"
+
+  v_driving:
+    type: verdict
+    text: "Great! Have a glass of wine when you get there."
+    board_label: "Destination wine"
+
+  v_pregnant:
+    type: verdict
+    text: "Great! Have a glass of wine in an average of 4½ months. Pop that in the diary, next to any incidental events that may be happening at around the same time."
+    board_label: "Diarise"
+
+  v_mood:
+    type: verdict
+    text: "You know what will help with that? Have a glass of wine!"
+    board_label: "Mood fixer"
+
+  v_sorry:
+    type: verdict
+    text: "Sorry that didn't work out for you. Have a glass of wine about it."
+    board_label: "Commiserations"
+
+loading_lines:
+  - "Refilling the crisps..."
+  - "Checking with the sommelier..."
+  - "Fetching the little black book of wine..."
+  - "Telling customers we don't serve Prosecco..."
+  - "Polishing the Coravins..."
+  - "Adding dust to the priciest bottles..."
+
+reveal:
+  button: "What's on the board?"
+  heading: "TODAY'S SPECIALS"
+  final_node: "A GLASS OF WINE"
+  restart: "Another glass?"
+  # Read aloud before the visitor's own answers, for screen readers only.
+  route_intro: "You said:"
+  # Where each node sits on the board. col runs left to right, row top to
+  # bottom; fractions and negatives are fine, the board fits itself round
+  # whatever is there. "final" is A GLASS OF WINE. "loop" is the centre of
+  # the loop-the-loop on any arrow that runs back up the board.
+  layout:
+    q1:            { col: 2.5,  row: 1 }
+    q2_now:        { col: 1.5,  row: 2 }
+    q2_sure:       { col: 3.6,  row: 2 }
+    q3_why:        { col: 1,    row: 3 }
+    q3_early:      { col: 2.4,  row: 3 }
+    q3_wrong:      { col: 4.2,  row: 3 }
+    v_driving:     { col: 0.25, row: 5 }
+    v_pregnant:    { col: 0.9,  row: 4.5 }
+    v_mood:        { col: 1.55, row: 4.25 }
+    v_five_oclock: { col: 2.5,  row: 4.3 }
+    v_great:       { col: 3.35, row: 4.5 }
+    v_sorry:       { col: 4.2,  row: 5 }
+    final:         { col: 2.2,  row: 6.1 }
+    loop:          { col: 0.45, row: 2.05 }
+
+# Shown only when JavaScript is off.
+noscript: "This board needs JavaScript."
+
+# The 404 page.
+not_found:
+  heading: "That page doesn't exist. You know what does?"
+  button: "Wine."

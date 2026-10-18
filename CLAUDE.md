@@ -10,21 +10,28 @@ is the only enforcement.
   is NOT in the container: say so before doing anything else.
 - **Scratch files go in this project's `tmp/`** (gitignored), never the system
   `/tmp`, never `~`.
-- Build: `bundle exec jekyll build`. Serve on the published port:
-  `bundle exec jekyll serve --host 0.0.0.0 --port 9001`. Kit tests:
-  `python3 -m pytest`.
+- Build: `bundle exec jekyll build`. Serve on the first free host port from
+  9000 up, which `PORTS` in `.devcontainer/kit.env` publishes:
+  `bundle exec jekyll serve --host 0.0.0.0 --port <port> --force_polling`.
+  Polling, because file events from the Windows host get lost. Kit tests:
+  `python3 -m pytest`. Pathway check: `ruby scripts/validate-pathway.rb`.
 - The site is Jekyll with no plugins, vanilla JS and inline SVG only. No
-  raster images, no npm, no new gems without asking.
+  raster images, no npm, no new gems without asking. Google Fonts is the only
+  outside request.
 
 ## The site
-- Every page is front matter only: a `question` and a list of `links`, each
-  `{ label, to }` and optionally `class`. The layout does the rest. A new
-  question is a new file plus a link pointing at it.
-- Every path ends at `/drink/` or a page that says so. The one exception is
-  driving. Keep it that way.
-- Colours and fonts live in `_sass/_palette.scss` and nowhere else. The accent
-  is `#FF00C8`. Jewels go one at a time next to it.
-- Big words, few of them. If a page needs a paragraph, it is the wrong page.
+- The brief is `model_instructions/shall-i-drink-wine-brief.md`.
+- One page, one script. **Every word lives in `_data/pathway.yml`**; code
+  never holds copy. A new question is a new node plus an answer pointing at
+  it plus a layout spot. `validate-pathway.rb` must pass.
+- **Helen's copy is final.** Never add, improve or invent jokes or words. If
+  something needs words the brief lacks, ask.
+- Every route ends in a glass of wine, within 5 questions.
+- Colours and fonts live in `_sass/_palette.scss` and nowhere else (the
+  favicon excepted). Lettering is chalk plus pink for wine, yellow for bar
+  patter, blue for cheer. No other colours, no green, no orange.
+- Hand-drawn art is one SVG per file in `_includes/`, so Helen can swap it.
+- Respect `prefers-reduced-motion` in every animation.
 
 ## Critical restrictions
 - NEVER run `rm -rf` outside `tmp/` without asking me first.

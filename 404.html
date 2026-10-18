@@ -1,0 +1,9 @@
+---
+layout: default
+permalink: /404.html
+---
+{% assign p = site.data.pathway %}
+<h1 class="question" tabindex="-1">{{ p.not_found.heading }}</h1>
+<div class="answers">
+  <a class="answer" href="{{ '/' | relative_url }}">{{ p.not_found.button }}</a>
+</div>

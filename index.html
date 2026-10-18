@@ -1,0 +1,10 @@
+---
+layout: default
+---
+{% assign p = site.data.pathway %}
+<h1 class="heading" tabindex="-1">{{ p.landing.heading }}<span class="heading-underline">{% include doodles/underline.svg %}</span></h1>
+<noscript><p class="noscript">{{ p.noscript }}</p></noscript>
+<div class="answers js-only">
+  <button class="answer" type="button">{{ p.landing.button }}</button>
+</div>
+<script type="application/json" id="pathway">{{ p | jsonify }}</script>
