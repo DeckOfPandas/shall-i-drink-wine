@@ -268,5 +268,8 @@ h1 { margin: 0; font-weight: 400; outline: none; }
 .footer-github { display: inline-flex; opacity: 0.8; }
 .footer-github:hover, .footer-github:focus-visible { opacity: 1; }
 .footer-icon { width: 2rem; height: 2rem; fill: currentColor; filter: drop-shadow(0 1px 2px var(--mortar)); }
+.licence { margin-top: -0.4rem; }
+.licence span { display: inline-block; white-space: nowrap; }
+.site-footer .licence a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
 .hearts { color: var(--wine); line-height: 0; margin-top: 0.5rem; }
 .hearts svg { display: block; width: min(240px, 45vw); height: auto; filter: drop-shadow(0 1px 2px var(--mortar)); }

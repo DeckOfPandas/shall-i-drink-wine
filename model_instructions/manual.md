@@ -22,10 +22,10 @@ is the same one as is-it-rhubarb-yet.
 - `scripts/validate-pathway.rb` passes and runs in the Pages workflow before
   the build. The workflow only runs on pushes to `main`, so a broken pathway
   is caught at deploy, not in the PR.
-- The footer copies rhubarb's markup for the GitHub link, copyright and
-  hearts, verbatim apart from the repo URL. Rhubarb's data links and licence
-  line are left out: the data pages don't exist here and there is no
-  LICENSE file.
+- The footer copies rhubarb's markup for the GitHub link, copyright,
+  licence line and hearts, verbatim apart from the repo URLs. Rhubarb's data
+  links are left out because the data pages don't exist here. `LICENSE` is
+  rhubarb's MIT licence, word for word.
 - Eight kit tests fail. The same eight fail in is-it-rhubarb-yet, so they
   came with the kit: Dockerfile defaults disagree with `kit.env`, a
   `settings.local.example.json` the tests expect is absent, and the wrappers

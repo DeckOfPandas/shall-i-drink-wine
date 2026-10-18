@@ -18,6 +18,12 @@
   <footer class="site-footer">
     <a class="footer-github" href="https://github.com/DeckOfPandas/shall-i-drink-wine" aria-label="Source on GitHub">{% include icons/github.svg %}</a>
     <p class="copyright">&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
+    {% comment %} Two sentences in two spans, so a narrow screen breaks
+       between them and never inside one. {% endcomment %}
+    <p class="licence">
+      <span>Code: <a href="https://github.com/DeckOfPandas/shall-i-drink-wine/blob/main/LICENSE">MIT</a>.</span>
+      <span>Data and writing: <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</span>
+    </p>
     <div class="hearts" aria-hidden="true">{% include icons/hearts.svg %}</div>
   </footer>
 </div>

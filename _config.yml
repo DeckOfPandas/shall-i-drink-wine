@@ -10,6 +10,7 @@ exclude:
   - CLAUDE.md
   - Gemfile
   - Gemfile.lock
+  - LICENSE
   - README.md
   - model_instructions
   - pytest.ini
