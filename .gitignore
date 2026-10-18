@@ -8,3 +8,4 @@ _site
 .claude/worktrees
 .jekyll-cache/
 vendor/
+*:Zone.Identifier
