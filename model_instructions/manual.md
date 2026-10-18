@@ -13,11 +13,9 @@ is the same one as is-it-rhubarb-yet.
 
 ## Status
 
-- The rebuild is on branch `dev/rebuild`, local only. Nothing is pushed.
-- The brief wants the repo `DeckOfPandas/shall-i-drink-wine`. This checkout's
-  remote is still `should-i-drink-wine`, and `scripts/github.conf` only
-  reaches that. Helen is sorting out the repo; until then, push nothing.
-  The footer's GitHub link already points at `shall-i-drink-wine`.
+- The repo is `DeckOfPandas/shall-i-drink-wine`, renamed from
+  `should-i-drink-wine`; the remote and `scripts/github.conf` both use the
+  new name. The Pages URL is `/shall-i-drink-wine/`.
 - All 9 routes click through to the right verdict and reveal, by mouse and
   by keyboard, with and without reduced motion. Checked in Chromium only, at
   375 and 1440 px wide.
@@ -53,8 +51,8 @@ is the same one as is-it-rhubarb-yet.
 
 ## To do next
 
-- Make the repo, point `github.conf` and the remote at it, set Pages to
-  "GitHub Actions", push, open the PR.
+- Set Pages to "GitHub Actions" in the repository settings, if it isn't
+  already, so the first merge to `main` deploys.
 - Check the reveal on a real phone. Labels there are about 13 px; legible,
   not generous. The layout in `pathway.yml` is the lever.
 - Check in Safari and Firefox. Nothing exotic is used, but SVG `pathLength`
