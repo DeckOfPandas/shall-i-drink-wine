@@ -1,68 +1,272 @@
 ---
 ---
 @use "palette" as *;
+@import url("#{$fonts-url}");
 
-html, body { height: 100%; margin: 0; }
+:root {
+  @each $name, $hex in $colours {
+    --#{$name}: #{$hex};
+  }
+  // Fill colour for the hover scribble on answers: --wine, --crisps or --soda.
+  --scribble: var(--wine);
+  --draw-time: 0.45s;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--mortar); }
 
 body {
-  background: $colour-bg;
-  color: $colour-fg;
+  margin: 0;
+  min-height: 100vh;
+  color: var(--chalk);
   font-family: $font-body;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.js-only { visibility: hidden; }
+.js .js-only { visibility: visible; }
+
+// Wall, frame, board ---------------------------------------------------------
+
+.wall { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; }
+.wall .mortar { fill: var(--mortar); }
+.wall .b1 { fill: var(--brick-1); }
+.wall .b2 { fill: var(--brick-2); }
+.wall .b3 { fill: var(--brick-3); }
+.wall .b4 { fill: var(--brick-4); }
+
+.page {
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 1rem;
-  box-sizing: border-box;
+  gap: 1.5rem;
+  padding: clamp(1.5rem, 6vh, 4rem) 16px 1.5rem;
 }
 
-main { max-width: 22ch; }
-
-h1 {
-  font-family: $font-display;
-  font-weight: $weight-display;
-  font-size: clamp(2.5rem, 9vw, 7rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.6em;
+.frame {
+  width: min(36rem, 100%);
+  border: clamp(10px, 2.2vw, 18px) solid var(--oak);
+  box-shadow: 0 0 0 2px var(--mortar), 6px 8px 0 var(--mortar);
 }
 
-nav {
+.board {
+  position: relative;
+  overflow: hidden;
+  min-height: min(44rem, calc(100vh - 12rem));
   display: flex;
-  gap: 1.5em;
+  flex-direction: column;
   justify-content: center;
+  padding: clamp(2.5rem, 7vw, 4rem) clamp(1rem, 4vw, 2.5rem);
+  background: var(--slate);
+  box-shadow: inset 0 0 0 3px var(--slate-smudge);
+  text-align: center;
+}
+
+.stage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.75rem, 5vw, 2.5rem);
+}
+
+h1 { margin: 0; font-weight: 400; outline: none; }
+.stage p { margin: 0; }
+
+// Eraser residue, shown once the board has been wiped for the reveal.
+.smudge {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: none;
+  fill: none;
+  stroke: var(--slate-smudge);
+  stroke-width: 34;
+  opacity: 0.7;
+}
+.board.wiped .smudge { display: block; }
+
+// Words ----------------------------------------------------------------------
+
+.heading {
+  font-family: $font-heading;
+  font-size: clamp(2.5rem, 10vw, 4.25rem);
+  line-height: 1.1;
+}
+.heading-underline { display: block; width: 85%; height: 0.32em; margin: 0.3em auto 0; }
+.heading-underline svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+.question {
+  font-size: clamp(2rem, 7.5vw, 3rem);
+  line-height: 1.15;
+  max-width: 15ch;
+}
+
+.verdict {
+  font-family: $font-verdict;
+  font-size: clamp(2rem, 6.5vw, 2.75rem);
+  line-height: 1.15;
+  max-width: 19ch;
+}
+
+.wine-word { color: var(--wine); }
+.cheer { color: var(--soda); }
+
+.loading-line {
+  color: var(--crisps);
+  font-size: clamp(1.5rem, 5.5vw, 2rem);
+  max-width: 18ch;
+}
+
+.noscript { font-size: 1.5rem; }
+
+// Hand-circled answers -------------------------------------------------------
+
+.answers {
+  display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem 2.25rem;
+}
+@media (max-width: 34rem) {
+  .answers.many { flex-direction: column; align-items: center; gap: 1rem; }
 }
 
-a {
-  color: $colour-accent;
-  font-weight: $weight-body;
-  font-size: clamp(1.5rem, 4vw, 3rem);
+.answer {
+  position: relative;
+  display: inline-block;
+  padding: 0.5em 1.25em;
+  border: 0;
+  background: none;
+  color: var(--chalk);
+  font-family: $font-body;
+  font-size: 1.625rem;
+  line-height: 1.2;
   text-decoration: none;
-  border-bottom: 0.12em solid $colour-accent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.answer-label { position: relative; z-index: 1; }
+.answer svg {
+  position: absolute;
+  inset: -0.1em -0.25em;
+  width: calc(100% + 0.5em);
+  height: calc(100% + 0.2em);
+  overflow: visible;
+  pointer-events: none;
+}
+.answer .loop { color: var(--chalk); }
+.answer .loop.flip { transform: scaleX(-1); }
+.answer .scribble {
+  inset: 0.15em 0.2em;
+  width: calc(100% - 0.4em);
+  height: calc(100% - 0.3em);
+  color: var(--scribble);
+  opacity: 0.55;
+}
+// Every scribble stroke has pathLength="1", set by main.js. The offset sits
+// just past one so the round cap at the start stays hidden too.
+.answer .scribble * { stroke-dasharray: 1 2; stroke-dashoffset: 1.05; transition: stroke-dashoffset 0.4s ease-out; }
+.answer:hover .scribble *,
+.answer:focus-visible .scribble * { stroke-dashoffset: 0; }
+.answer:focus { outline: none; }
+.answer:focus-visible { outline: 2px dashed var(--wine); outline-offset: 0.6em; }
 
-  &:hover, &:focus {
-    color: $colour-on-accent;
-    background: $colour-accent;
-    outline: none;
-  }
+// Doodles --------------------------------------------------------------------
+
+.c-chalk { stroke: var(--chalk); }
+.c-wine { stroke: var(--wine); }
+.c-crisps { stroke: var(--crisps); }
+.c-soda { stroke: var(--soda); }
+.f-wine { fill: var(--wine); stroke: none; }
+
+.doodles { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.doodle {
+  position: absolute;
+  width: clamp(2.25rem, 8vw, 3.75rem);
+  height: clamp(2.25rem, 8vw, 3.75rem);
+  overflow: visible;
+}
+@media (max-width: 34rem) {
+  .doodle.edge { display: none; }
 }
 
-// Jewels as custom properties, so inline SVG and JS can reach them too.
-:root {
-  --colour-accent: #{$colour-accent};
-  @each $name, $hex in $jewels {
-    --colour-#{$name}: #{$hex};
-  }
+// Loading --------------------------------------------------------------------
+
+.loading-glass { width: 4.5rem; height: auto; overflow: visible; }
+.loading-glass .wine {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: fill var(--fill-time, 1.8s) ease-in-out both;
+}
+@keyframes fill { from { transform: scaleY(0); } }
+
+// Reveal ---------------------------------------------------------------------
+
+.wipe { position: absolute; inset: 0; z-index: 5; pointer-events: none; transition: opacity 0.35s; }
+.wipe svg { width: 100%; height: 100%; display: block; }
+.wipe path { fill: none; stroke: var(--slate); stroke-width: 80; }
+.wipe.done { opacity: 0; }
+
+.chart { width: calc(100% + 1.5rem); margin: 0 -0.75rem; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart .edge, .chart .ring, .chart .mark {
+  fill: none;
+  stroke: var(--chalk);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.chart .on-route { stroke: var(--wine); }
+.chart .label { fill: var(--chalk); font-family: $font-body; font-size: 27px; }
+.chart .final-label { font-family: $font-verdict; font-size: 38px; }
+// The chart shrinks to fit a phone, so its words start bigger there.
+@media (max-width: 34rem) {
+  .chart .label { font-size: 29px; }
+  .chart .final-label { font-size: 40px; }
 }
 
-// `.jewel-ruby` on a link or heading recolours it. Add it in a page's
-// front matter via `links: - { label, to, class }` if you want it per link.
-@each $name, $hex in $jewels {
-  .jewel-#{$name} { color: $hex; border-color: $hex; }
-  a.jewel-#{$name}:hover, a.jewel-#{$name}:focus { background: $hex; color: $colour-on-accent; }
+// Draw-in: anything with pathLength="1" and .draw traces itself in, starting
+// after its --d delay. .fade just appears.
+.draw { stroke-dasharray: 1 2; stroke-dashoffset: 1.05; animation: draw var(--draw-time) ease-out forwards; animation-delay: var(--d, 0s); }
+.fade { opacity: 0; animation: fade 0.4s ease-out forwards; animation-delay: var(--d, 0s); }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fade { to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .answer .scribble * { transition: none; }
+  .loading-glass .wine { animation: none; }
+  .draw { animation: none; stroke-dashoffset: 0; }
+  .fade { animation: none; opacity: 1; }
 }
 
-// Swatch page only.
-.swatches { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; max-width: 40rem; }
-.swatch { width: 7rem; padding: 1rem 0.5rem; font-size: 1rem; font-weight: $weight-body; border-radius: 0.25rem; color: $colour-on-accent; }
+// Footer ---------------------------------------------------------------------
+
+.site-footer {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  text-align: center;
+  font-size: 1rem;
+  text-shadow: 0 1px 2px var(--mortar), 0 0 6px var(--mortar);
+}
+.site-footer p { margin: 0; }
+.site-footer a { color: inherit; }
+.site-footer a:hover, .site-footer a:focus-visible { color: var(--wine); }
+.site-footer a:focus-visible { outline: 2px dashed var(--wine); outline-offset: 4px; }
+.footer-github { display: inline-flex; opacity: 0.8; }
+.footer-github:hover, .footer-github:focus-visible { opacity: 1; }
+.footer-icon { width: 2rem; height: 2rem; fill: currentColor; filter: drop-shadow(0 1px 2px var(--mortar)); }
+.hearts { color: var(--wine); line-height: 0; margin-top: 0.5rem; }
+.hearts svg { display: block; width: min(240px, 45vw); height: auto; filter: drop-shadow(0 1px 2px var(--mortar)); }
